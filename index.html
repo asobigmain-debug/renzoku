@@ -4,19 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>連続講談千鳥亭</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f7f3eb;--bg2:#ede7d8;--card:#fff;--ink:#1a1208;--ink2:#3a2e18;--red:#9b2335;--red2:#bf3346;--gold:#8a6e2f;--gold2:#b38d3a;--bdr:rgba(138,110,47,0.22);--bdr2:rgba(138,110,47,0.45);--sh:rgba(26,18,8,0.1);}
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
 body{font-family:"Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
 body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.5' fill='%238a6e2f' opacity='0.12'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 .hd{background:var(--ink);color:var(--bg);padding:0 16px;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--red);}
 .hd-mon{font-family:"Shippori Mincho B1",serif;font-size:1.4rem;color:var(--gold2);}
 .hd-ttl{font-family:"Shippori Mincho B1",serif;font-size:0.95rem;letter-spacing:0.28em;flex:1;}
-.hd-r{display:flex;gap:6px;flex-shrink:0;}
 .nav{background:#2a1e0e;display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--red);}
 .nav::-webkit-scrollbar{display:none;}
 .ntab{padding:9px 14px;color:rgba(247,243,235,0.45);font-size:0.74rem;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:"Noto Sans JP",sans-serif;transition:all 0.18s;margin-bottom:-2px;letter-spacing:0.08em;}
@@ -27,65 +24,81 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
 .sec{font-family:"Shippori Mincho B1",serif;font-size:0.95rem;letter-spacing:0.22em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;}
 .sec::before{content:"";display:block;width:4px;height:16px;background:var(--red);border-radius:2px;}
 .lbl{font-size:0.67rem;letter-spacing:0.2em;color:var(--gold);font-weight:600;margin-bottom:5px;display:block;}
-.inp,.sel,.ta{border:1.5px solid var(--bdr2);border-radius:5px;padding:8px 11px;font-family:"Noto Sans JP",sans-serif;font-size:0.87rem;color:var(--ink);background:rgba(247,243,235,0.95);width:100%;-webkit-appearance:none;transition:border-color 0.18s;}
-.inp:focus,.sel:focus,.ta:focus{outline:none;border-color:var(--red);}
-.ta{resize:vertical;line-height:1.9;min-height:220px;}
+.inp,.ta{border:1.5px solid var(--bdr2);border-radius:5px;padding:8px 11px;font-family:"Noto Sans JP",sans-serif;font-size:0.87rem;color:var(--ink);background:rgba(247,243,235,0.95);width:100%;-webkit-appearance:none;transition:border-color 0.18s;}
+.inp:focus,.ta:focus{outline:none;border-color:var(--red);}
 .fg{display:grid;gap:13px;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .btn{padding:8px 18px;border-radius:5px;font-family:"Noto Sans JP",sans-serif;font-size:0.82rem;cursor:pointer;transition:all 0.16s;border:none;font-weight:500;}
 .btn-p{background:var(--red);color:#fff;}.btn-p:hover{background:var(--red2);}
 .btn-s{background:transparent;color:var(--ink2);border:1.5px solid var(--bdr2);}.btn-s:hover{border-color:var(--red);color:var(--red);}
 .btn-sm{padding:5px 12px;font-size:0.74rem;}
 .br{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px;}
+/* 統計 */
 .sg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px;}
 .sb{background:var(--ink);border-radius:7px;padding:12px 8px;text-align:center;}
 .sn{font-family:"Shippori Mincho B1",serif;font-size:1.5rem;color:var(--gold2);line-height:1;}
 .sl{font-size:0.6rem;letter-spacing:0.12em;color:rgba(247,243,235,0.5);margin-top:3px;}
-.toolbar{display:flex;gap:7px;margin-bottom:13px;flex-wrap:wrap;align-items:center;}
-.t-inp{flex:1;min-width:140px;border:1.5px solid var(--bdr2);border-radius:20px;padding:6px 14px;font-family:"Noto Sans JP",sans-serif;font-size:0.83rem;background:#fff;color:var(--ink);outline:none;}
-.t-inp:focus{border-color:var(--red);}
-.sb2{padding:4px 10px;border-radius:4px;font-size:0.7rem;cursor:pointer;border:1.5px solid var(--bdr2);background:rgba(255,255,255,0.7);color:var(--ink2);font-family:"Noto Sans JP",sans-serif;transition:all 0.15s;}
-.sb2:hover{border-color:var(--red);color:var(--red);}.sb2.on{background:var(--ink);color:var(--bg);border-color:var(--ink);}
-.range-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding-bottom:2px;}
-.range-tabs::-webkit-scrollbar{display:none;}
-.rtab{padding:5px 12px;border-radius:15px;font-size:0.72rem;cursor:pointer;border:1.5px solid var(--bdr2);background:rgba(255,255,255,0.7);color:var(--ink2);white-space:nowrap;font-family:"Noto Sans JP",sans-serif;transition:all 0.15s;flex-shrink:0;}
-.rtab:hover{border-color:var(--red);}.rtab.on{background:var(--red);color:#fff;border-color:var(--red);}
-.cnt-txt{font-size:0.72rem;color:var(--gold);letter-spacing:0.1em;}
+/* ソートバー */
+.sort-bar{display:flex;gap:6px;margin-bottom:12px;align-items:center;flex-wrap:wrap;}
+.sort-btn{padding:6px 14px;border-radius:20px;font-size:0.76rem;cursor:pointer;border:1.5px solid var(--bdr2);background:rgba(255,255,255,0.7);color:var(--ink2);font-family:"Noto Sans JP",sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:4px;}
+.sort-btn:hover{border-color:var(--red);}.sort-btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+/* 検索 */
+.s-wrap{display:flex;gap:7px;margin-bottom:12px;}
+.s-inp{flex:1;border:1.5px solid var(--bdr2);border-radius:20px;padding:7px 14px;font-family:"Noto Sans JP",sans-serif;font-size:0.83rem;background:#fff;color:var(--ink);outline:none;}
+.s-inp:focus{border-color:var(--red);}
+/* 記録行 */
 .row{background:rgba(255,255,255,0.75);border:1px solid var(--bdr);border-radius:6px;padding:12px 14px;margin-bottom:7px;cursor:pointer;transition:all 0.14s;border-left:4px solid var(--red);}
 .row:hover{box-shadow:0 3px 10px var(--sh);transform:translateX(2px);}
 .row-top{display:flex;align-items:baseline;gap:8px;margin-bottom:3px;flex-wrap:wrap;}
 .row-num{font-family:"Shippori Mincho B1",serif;font-size:1rem;color:var(--red);font-weight:700;white-space:nowrap;}
 .row-date{font-size:0.73rem;color:var(--gold);white-space:nowrap;}
 .row-body{font-size:0.81rem;color:var(--ink2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.row-photo{font-size:0.67rem;color:var(--gold2);margin-top:2px;}
-.num-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
-.num-badge{display:inline-block;background:var(--ink);color:var(--gold2);font-family:"Shippori Mincho B1",serif;font-size:1.1rem;padding:5px 14px;border-radius:5px;letter-spacing:0.1em;cursor:pointer;}
+/* 100回タブ */
+.range-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding-bottom:2px;}
+.range-tabs::-webkit-scrollbar{display:none;}
+.rtab{padding:5px 12px;border-radius:15px;font-size:0.72rem;cursor:pointer;border:1.5px solid var(--bdr2);background:rgba(255,255,255,0.7);color:var(--ink2);white-space:nowrap;font-family:"Noto Sans JP",sans-serif;transition:all 0.15s;flex-shrink:0;}
+.rtab:hover{border-color:var(--red);}.rtab.on{background:var(--red);color:#fff;border-color:var(--red);}
+/* 回数表示 */
+.num-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.num-badge{font-family:"Shippori Mincho B1",serif;font-size:1.2rem;background:var(--ink);color:var(--gold2);padding:5px 16px;border-radius:6px;cursor:pointer;user-select:none;}
 .day-disp{font-size:0.77rem;color:var(--ink2);}
+/* ネタ入力セル */
+.neta-header{display:grid;grid-template-columns:1fr 1fr 60px;gap:5px;padding:0 4px;margin-bottom:4px;}
+.neta-hl{font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;}
+.neta-row{display:grid;grid-template-columns:1fr 1fr 60px;gap:5px;margin-bottom:5px;align-items:center;}
+.neta-inp{border:1.5px solid var(--bdr);border-radius:5px;padding:7px 9px;font-family:"Noto Sans JP",sans-serif;font-size:0.85rem;color:var(--ink);background:rgba(247,243,235,0.95);width:100%;}
+.neta-inp:focus{outline:none;border-color:var(--red);}
+.neta-inp.perf{background:rgba(245,238,215,0.95);}
+.neta-btns{display:flex;gap:3px;}
+.nb{width:26px;height:26px;border-radius:4px;background:none;border:1.5px solid var(--bdr);color:var(--ink2);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;transition:all 0.12s;padding:0;}
+.nb:hover{border-color:var(--red);color:var(--red);}
+.nb.del:hover{background:rgba(155,35,53,0.08);}
+/* モーダル */
 .mo{display:none;position:fixed;inset:0;background:rgba(26,18,8,0.65);z-index:200;overflow-y:auto;padding:14px;}
 .mo.on{display:flex;align-items:flex-start;justify-content:center;}
 .mb{background:var(--bg);border-radius:10px;padding:22px;max-width:680px;width:100%;margin:auto;border-top:4px solid var(--red);}
 .mc{float:right;background:none;border:none;font-size:1rem;cursor:pointer;color:var(--ink2);opacity:0.5;padding:2px 6px;}
 .mo-num{font-family:"Shippori Mincho B1",serif;font-size:1.4rem;color:var(--red);}
 .mo-date{font-size:0.78rem;color:var(--gold);margin-bottom:12px;}
-.mo-body{font-size:0.87rem;line-height:1.95;white-space:pre-wrap;color:var(--ink2);}
-.drop-area{border:2px dashed var(--bdr2);border-radius:7px;padding:20px;text-align:center;cursor:pointer;transition:all 0.18s;position:relative;}
-.drop-area:hover{border-color:var(--red);background:rgba(155,35,53,0.03);}
+/* ネタテーブル */
+.neta-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
+.neta-table th{font-size:0.67rem;color:var(--gold);text-align:left;padding:3px 8px;border-bottom:1px solid var(--bdr);letter-spacing:0.15em;}
+.neta-table td{padding:7px 8px;font-size:0.87rem;border-bottom:1px dashed var(--bdr);}
+.neta-table tr:last-child td{border-bottom:none;}
+.neta-table td:first-child{color:var(--gold2);font-weight:600;white-space:nowrap;font-size:0.83rem;}
+.neta-table tr:nth-child(even){background:rgba(247,243,235,0.5);}
+/* 管理 */
+.drop-area{border:2px dashed var(--bdr2);border-radius:7px;padding:16px;text-align:center;cursor:pointer;transition:all 0.18s;position:relative;}
+.drop-area:hover{border-color:var(--red);}
 .drop-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.drop-txt{font-size:0.78rem;color:var(--gold);letter-spacing:0.1em;}
-/* セル入力 */
-.neta-row{display:grid;grid-template-columns:1fr 1fr 32px;gap:5px;margin-bottom:5px;align-items:center;}
-.neta-inp{border:1.5px solid var(--bdr);border-radius:5px;padding:7px 9px;font-family:"Noto Sans JP",sans-serif;font-size:0.85rem;color:var(--ink);background:rgba(247,243,235,0.95);width:100%;transition:border-color 0.15s;}
-.neta-inp:focus{outline:none;border-color:var(--red);}
-.neta-inp.perf{background:rgba(245,238,215,0.95);}
-.neta-del{width:28px;height:28px;border-radius:5px;background:none;border:1.5px solid var(--bdr);color:var(--ink2);cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.14s;}
-.neta-del:hover{border-color:var(--red);color:var(--red);}
-.mo-ttl{font-family:"Shippori Mincho B1",serif;font-size:1rem;letter-spacing:0.18em;color:var(--ink2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.mo-ttl::before{content:"";display:block;width:4px;height:16px;background:var(--red);border-radius:2px;}
-.mo-br{display:flex;gap:8px;justify-content:flex-end;}
+.drop-txt{font-size:0.78rem;color:var(--gold);}
 .prog{font-size:0.74rem;color:var(--gold);margin-top:5px;min-height:17px;}
+/* トースト */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(65px);background:var(--ink);color:var(--bg);padding:10px 22px;border-radius:20px;font-size:0.8rem;z-index:999;transition:transform 0.3s;border-left:4px solid var(--red);white-space:nowrap;}
 .toast.on{transform:translateX(-50%) translateY(0);}
-.es{text-align:center;padding:40px 16px;}.es-i{font-size:2.2rem;opacity:0.25;margin-bottom:8px;}.es-t{font-size:0.8rem;color:var(--gold);line-height:2;}
+.es{text-align:center;padding:40px 16px;}
+.es-i{font-size:2.2rem;opacity:0.25;margin-bottom:8px;}
+.es-t{font-size:0.8rem;color:var(--gold);line-height:2;}
+.cnt-txt{font-size:0.72rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;}
 </style>
 </head>
 <body>
@@ -93,7 +106,7 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
 <div class="hd">
   <div class="hd-mon">講</div>
   <div class="hd-ttl">連続講談千鳥亭</div>
-  <div class="hd-r"><button class="btn btn-p btn-sm" onclick="go('write')">＋ 記録</button></div>
+  <button class="btn btn-p btn-sm" onclick="go('write')" style="flex-shrink:0;">＋ 記録</button>
 </div>
 <nav class="nav">
   <button class="ntab on" onclick="go('home')">📋 一覧</button>
@@ -110,8 +123,12 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
     <div class="sb"><div class="sn" id="s-next">第1回</div><div class="sl">次回</div></div>
   </div>
   <div class="range-tabs" id="range-tabs"></div>
+  <div class="sort-bar">
+    <button class="sort-btn on" id="sort-new" onclick="setSortHome('desc',this)">▼ 新しい順</button>
+    <button class="sort-btn" id="sort-old" onclick="setSortHome('asc',this)">▲ 古い順</button>
+  </div>
   <div class="cnt-txt" id="home-cnt"></div>
-  <div id="rec-list"><div class="es"><div class="es-i">📜</div><div class="es-t">まだ記録がありません<br>「記録する」タブから追加してください</div></div></div>
+  <div id="rec-list"><div class="es"><div class="es-i">📜</div><div class="es-t">まだ記録がありません</div></div></div>
 </div>
 
 <!-- 記録する -->
@@ -122,36 +139,33 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
       <label class="lbl">日付</label>
       <input type="date" id="w-date" class="inp" onchange="onDateChange()">
       <div class="num-row">
-        <div class="num-badge" id="num-disp" title="クリックで手動修正">―</div>
+        <div class="num-badge" id="num-disp" title="タップで手動修正">―</div>
         <div class="day-disp" id="day-disp"></div>
       </div>
       <div id="num-edit-wrap" style="display:none;margin-top:8px;">
         <label class="lbl">回数（手動修正）</label>
         <input type="number" id="w-num" class="inp" style="width:110px;" min="1">
       </div>
-      <div style="font-size:0.66rem;color:var(--ink2);margin-top:3px;">※回数バッジをクリックで直接修正できます</div>
     </div>
 
-    <!-- 根多セル入力 -->
+    <!-- ネタ入力 -->
     <div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <label class="lbl" style="margin:0;">根多（演者・演目）</label>
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-s btn-sm" onclick="openPhotoRead()" style="font-size:0.72rem;">📷 写真から読み取り</button>
-          <button class="btn btn-s btn-sm" onclick="addNetaRow()" style="font-size:0.72rem;">＋ 行を追加</button>
+        <div style="display:flex;gap:5px;">
+          <button class="btn btn-s btn-sm" onclick="inheritPrev()" style="font-size:0.72rem;">⏮ 前回を引き継ぐ</button>
+          <button class="btn btn-s btn-sm" onclick="addNetaRow()" style="font-size:0.72rem;">＋ 行追加</button>
         </div>
       </div>
-      <!-- ヘッダー -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 32px;gap:5px;margin-bottom:4px;padding:0 4px;">
-        <div style="font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;">演者</div>
-        <div style="font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;">演目</div>
+      <div class="neta-header">
+        <div class="neta-hl">演者</div>
+        <div class="neta-hl">演目</div>
         <div></div>
       </div>
       <div id="neta-rows"></div>
-      <div style="font-size:0.68rem;color:var(--ink2);margin-top:6px;">※行を長押し（ドラッグ）で順番を入れ替えられます</div>
     </div>
 
-    <div><label class="lbl">写真リンク</label><input type="url" id="w-photo" class="inp"></div>
+    <div><label class="lbl">写真リンク</label><input type="url" id="w-photo" class="inp" placeholder="https://..."></div>
     <div class="br">
       <button class="btn btn-s btn-sm" id="del-btn" style="display:none;border-color:var(--red);color:var(--red);" onclick="delRec()">削除</button>
       <button class="btn btn-s btn-sm" onclick="clearForm()">クリア</button>
@@ -160,37 +174,14 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
   </div>
 </div></div>
 
-<!-- 写真読み取りモーダル -->
-<div class="mo" id="mo-photo"><div class="mb">
-  <button class="mc" onclick="closeMoPhoto()">✕</button>
-  <div class="mo-ttl">📷 ネタ帳写真から読み取り</div>
-  <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:14px;line-height:1.8;">
-    ネタ帳の写真を撮影してアップロードすると、AIが演者・演目を自動で読み取ります。<br>
-    <span style="font-size:0.7rem;color:var(--gold);">※Anthropic APIキーが必要です（管理タブで設定）</span>
-  </div>
-  <div class="drop-area" id="photo-drop">
-    <input type="file" accept="image/*" onchange="onPhotoUpload(this)">
-    <div class="drop-txt">📷 写真を選択またはカメラで撮影</div>
-  </div>
-  <img id="photo-preview-img" style="display:none;width:100%;max-height:200px;object-fit:contain;border-radius:6px;margin-top:8px;">
-  <div class="prog" id="photo-read-prog" style="margin-top:8px;"></div>
-  <div class="mo-br" style="margin-top:14px;">
-    <button class="btn btn-s btn-sm" onclick="closeMoPhoto()">キャンセル</button>
-    <button class="btn btn-p btn-sm" id="photo-read-btn" onclick="doPhotoRead()" disabled>🤖 AIで読み取る</button>
-  </div>
-</div></div>
-
 <!-- 検索 -->
 <div id="view-search" class="view main">
-  <div class="toolbar">
-    <input class="t-inp" id="sq" type="text" placeholder="回数・日付・内容で検索…" oninput="doSearch()">
-    <button class="btn btn-p btn-sm" onclick="doSearch()">検索</button>
+  <div class="s-wrap">
+    <input class="s-inp" id="sq" type="text" placeholder="回数・日付・演者・演目で検索…" oninput="doSearch()">
   </div>
-  <div style="display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;">
-    <button class="sb2 on" onclick="srt('num','desc',this)">回数↓</button>
-    <button class="sb2" onclick="srt('num','asc',this)">回数↑</button>
-    <button class="sb2" onclick="srt('date','desc',this)">日付↓</button>
-    <button class="sb2" onclick="srt('date','asc',this)">日付↑</button>
+  <div class="sort-bar">
+    <button class="sort-btn on" id="s-sort-new" onclick="setSortSearch('desc',this)">▼ 新しい順</button>
+    <button class="sort-btn" id="s-sort-old" onclick="setSortSearch('asc',this)">▲ 古い順</button>
   </div>
   <div class="cnt-txt" id="s-cnt"></div>
   <div id="s-result"></div>
@@ -216,37 +207,7 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
         <div class="drop-area"><input type="file" accept=".json,application/json" onchange="importFile(this,'json')"><div class="drop-txt">📂 JSONファイルを選択<br><span style="font-size:0.66rem;opacity:0.7;">既存の写真リンクは保護されます</span></div></div>
         <div class="prog" id="imp-prog-json"></div>
       </div>
-      <div style="font-size:0.76rem;color:var(--ink2);line-height:1.8;background:var(--bg2);padding:10px 12px;border-radius:6px;">
-        💡 GAS版とのデータ共有方法<br>
-        GAS版でエクスポート → このアプリでインポート、またはその逆でデータを同期できます。
-      </div>
     </div>
-  </div>
-  <div class="card"><div class="sec">📷 写真読み取り設定</div>
-    <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:10px;line-height:1.8;">
-      ネタ帳の写真からAIで演者・演目を読み取るには、AnthropicのAPIキーが必要です。<br>
-      <a href="https://console.anthropic.com/" target="_blank" style="color:var(--gold2);font-size:0.72rem;">console.anthropic.com</a> から取得できます。
-    </div>
-    <label class="lbl">APIキー</label>
-    <div style="display:flex;gap:8px;">
-      <input type="password" id="api-key-inp" class="inp" placeholder="sk-ant-..." style="flex:1;">
-      <button class="btn btn-p btn-sm" onclick="saveApiKey()">保存</button>
-    </div>
-    <div style="font-size:0.68rem;color:var(--ink2);margin-top:6px;">端末のみに保存されます。外部には送信されません。</div>
-    <div id="api-key-status" style="font-size:0.75rem;color:var(--gold);margin-top:4px;"></div>
-  </div>
-  <div class="card"><div class="sec">回数の補正</div>
-    <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:12px;line-height:1.8;">
-      自動計算がズレている場合に補正できます。<br>
-      例：自動計算が768と出るが実際は769 → <strong>+1</strong>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <label class="lbl" style="margin:0;">補正値：</label>
-      <input type="number" id="offset-inp" class="inp" style="width:90px;" value="0">
-      <button class="btn btn-p btn-sm" onclick="saveOffset()">保存</button>
-      <span id="offset-status" style="font-size:0.75rem;color:var(--gold);"></span>
-    </div>
-    <div style="font-size:0.68rem;color:var(--ink2);margin-top:8px;">現在の補正値：<span id="offset-current">0</span></div>
   </div>
   <div class="card"><div class="sec">データ管理</div>
     <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:10px;">全データを削除します（復元できません）</div>
@@ -254,42 +215,55 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
   </div>
 </div>
 
-<div class="mo" id="mo"><div class="mb"><button class="mc" onclick="cm()">✕</button><div id="mo-body"></div></div></div>
+<!-- 詳細モーダル -->
+<div class="mo" id="mo"><div class="mb">
+  <button class="mc" onclick="cm()">✕</button>
+  <div id="mo-body"></div>
+</div></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 var STORE_KEY = 'chiritori_records';
-var OFFSET_KEY = 'chiritori_offset';
-var allRecs = [], curId = null, sortKey = 'num', sortDir = 'desc', rangeStart = 1;
+var allRecs = [], curId = null, homeSort = 'desc', searchSort = 'desc', rangeStart = 1;
 var WD = ['日','月','火','水','木','金','土'];
 
 // ストレージ
 function load_() { try { return JSON.parse(localStorage.getItem(STORE_KEY)||'[]'); } catch(e){ return []; } }
-function save_(data) { localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
-function loadOffset_() { return parseInt(localStorage.getItem(OFFSET_KEY)||'0')||0; }
-function saveOffset_() {
-  var v = parseInt(document.getElementById('offset-inp').value)||0;
-  localStorage.setItem(OFFSET_KEY, String(v));
-  document.getElementById('offset-current').textContent = v > 0 ? '+'+v : String(v);
-  document.getElementById('offset-status').textContent = '✓ 保存しました';
-  setTimeout(function(){ document.getElementById('offset-status').textContent=''; },2000);
-  onDateChange();
-}
-function saveOffset() { saveOffset_(); }
+function save_(d) { localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
 
-// 回数計算
+// 回数計算：2026年3月21日=769回 を基準
 function calcNumber_(dateStr) {
+  var BASE_DATE = '2026-03-21';
+  var BASE_NUM  = 769;
   var d = new Date(dateStr + 'T00:00:00');
-  var y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
-  if (y === 2022) return Math.floor((d - new Date('2022-01-01T00:00:00')) / 86400000) + 1;
-  var count = 365;
-  for (var iy=2023; iy<y; iy++) for (var im=1; im<=12; im++) count += (new Date(iy,im,0).getDate()===31)?11:10;
-  if (y >= 2023) {
-    for (var im=1; im<m; im++) count += (new Date(y,im,0).getDate()===31)?11:10;
-    var last=new Date(y,m,0).getDate(), open=(last===31)?11:10, first=last-open+1;
-    if (day >= first) count += day - first + 1;
+  var base = new Date(BASE_DATE + 'T00:00:00');
+  if (dateStr === BASE_DATE) return BASE_NUM;
+
+  // 開催日リストを生成してカウント
+  // 2022年は毎日、2023年以降は月末10日間（31日の月は11日間）
+  function isKaichobi(ds) {
+    var dd = new Date(ds + 'T00:00:00');
+    var y = dd.getFullYear(), m = dd.getMonth()+1, day = dd.getDate();
+    if (y === 2022) return true;
+    var last = new Date(y, m, 0).getDate();
+    var open = (last === 31) ? 11 : 10;
+    return day >= last - open + 1;
   }
-  return count;
+
+  // 基準日から日付dまで開催日を数える（前後どちらでも）
+  var step = d > base ? 1 : -1;
+  var count = 0;
+  var cur = new Date(base);
+  cur.setDate(cur.getDate() + step);
+  while (true) {
+    var cs = cur.getFullYear()+'-'+('0'+(cur.getMonth()+1)).slice(-2)+'-'+('0'+cur.getDate()).slice(-2);
+    if (isKaichobi(cs)) count++;
+    if (cs === dateStr) break;
+    if (Math.abs(cur - d) > 366*5*86400000) break; // 安全弁
+    cur.setDate(cur.getDate() + step);
+  }
+  return step > 0 ? BASE_NUM + count : BASE_NUM - count;
 }
 
 function td() { var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
@@ -303,110 +277,120 @@ function go(id) {
   document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('on');});
   document.getElementById('view-'+id).classList.add('on');
   var m={home:0,write:1,search:2,data:3};
-  if(m[id]!==undefined)document.querySelectorAll('.ntab')[m[id]].classList.add('on');
+  if(m[id]!==undefined) document.querySelectorAll('.ntab')[m[id]].classList.add('on');
   window.scrollTo(0,0);
-  if(id==='home')renderHome();
+  if(id==='home') renderHome();
 }
 
 window.onload = function() {
   allRecs = load_();
-  var offset = loadOffset_();
-  document.getElementById('offset-inp').value = offset;
-  document.getElementById('offset-current').textContent = offset > 0 ? '+'+offset : String(offset);
-  // APIキー表示
-  var ak = localStorage.getItem('chiritori_apikey')||'';
-  if(ak) { document.getElementById('api-key-inp').value = ak; document.getElementById('api-key-status').textContent = '✓ APIキー設定済み'; }
   document.getElementById('w-date').value = td();
-  addNetaRow(); // 最初の行を追加
+  addNetaRow();
   onDateChange();
   renderStats();
   renderRangeTabs();
   renderHome();
 };
 
+// ===== 統計 =====
 function renderStats() {
   var y = new Date().getFullYear().toString();
   document.getElementById('s-total').textContent = allRecs.length;
   document.getElementById('s-year').textContent = allRecs.filter(function(r){return String(r.date).startsWith(y);}).length;
-  var maxNum = allRecs.length ? Math.max.apply(null,allRecs.map(function(r){return r.num;})) : 0;
+  var maxNum = allRecs.length ? Math.max.apply(null, allRecs.map(function(r){return r.num;})) : 0;
   document.getElementById('s-next').textContent = '第'+(maxNum+1)+'回';
 }
 
+// ===== 100回タブ =====
 function renderRangeTabs() {
-  var maxNum = allRecs.length ? Math.max.apply(null,allRecs.map(function(r){return r.num;})) : 100;
+  var maxNum = allRecs.length ? Math.max.apply(null, allRecs.map(function(r){return r.num;})) : 800;
   var tabs = '';
   for (var s=1; s<=maxNum+99; s+=100) {
-    tabs += '<button class="rtab'+(rangeStart===s?' on':'')+'" onclick="setRange('+s+')">'+(s)+'〜'+(s+99)+'回</button>';
+    tabs += '<button class="rtab'+(rangeStart===s?' on':'')+'" onclick="setRange('+s+')">'+(s)+'〜'+(s+99)+'</button>';
   }
   document.getElementById('range-tabs').innerHTML = tabs;
 }
-
 function setRange(s) { rangeStart=s; renderRangeTabs(); renderHome(); }
 
+// ===== 一覧 =====
+function setSortHome(dir, btn) {
+  homeSort = dir;
+  document.querySelectorAll('#sort-new,#sort-old').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderHome();
+}
+
 function renderHome() {
-  var sorted = allRecs.slice().sort(function(a,b){return b.num-a.num;});
+  var sorted = allRecs.slice().sort(function(a,b){ return homeSort==='desc' ? b.num-a.num : a.num-b.num; });
   var ranged = sorted.filter(function(r){return r.num>=rangeStart&&r.num<rangeStart+100;});
   document.getElementById('home-cnt').textContent = '第'+rangeStart+'〜'+(rangeStart+99)+'回：'+ranged.length+'件';
-  document.getElementById('rec-list').innerHTML = ranged.length ? ranged.map(rowHtml).join('') : '<div class="es"><div class="es-i">📜</div><div class="es-t">この範囲に記録がありません</div></div>';
+  document.getElementById('rec-list').innerHTML = ranged.length
+    ? ranged.map(rowHtml).join('')
+    : '<div class="es"><div class="es-i">📜</div><div class="es-t">この範囲に記録がありません</div></div>';
 }
 
 function rowHtml(r) {
+  var lines = r.content ? r.content.split('\n') : [];
+  var preview = lines.slice(0,2).map(function(l){
+    var m=l.match(/^【(.*)】(.*)$/);
+    return m ? m[1]+'「'+m[2]+'」' : l;
+  }).join('　');
   return '<div class="row" onclick="openModal(\''+r.id+'\')">'
     +'<div class="row-top"><span class="row-num">第'+r.num+'回</span><span class="row-date">'+fdate(r.date)+'</span></div>'
-    +(r.content?'<div class="row-body">'+r.content.slice(0,80)+(r.content.length>80?'…':'')+'</div>':'')
-    +(r.photo&&r.photo!=='null'&&r.photo.trim()?'<div class="row-photo">📷 写真あり</div>':'')
+    +(preview?'<div class="row-body">'+preview+'</div>':'')
     +'</div>';
 }
 
+// ===== 回数計算 =====
 function onDateChange() {
   var dt = document.getElementById('w-date').value;
   if(!dt) return;
-  var n = calcNumber_(dt) + loadOffset_();
+  document.getElementById('day-disp').textContent = fdate(dt);
+  var n = calcNumber_(dt);
   document.getElementById('num-disp').textContent = '第'+n+'回';
   document.getElementById('w-num').value = n;
-  document.getElementById('day-disp').textContent = fdate(dt);
 }
 
 document.getElementById('num-disp').addEventListener('click', function(){
   var w = document.getElementById('num-edit-wrap');
   w.style.display = w.style.display==='none' ? 'block' : 'none';
+  if(w.style.display==='block') document.getElementById('w-num').focus();
 });
 
-// ===== セル入力 =====
+// ===== ネタ行 =====
 function addNetaRow(perf, title) {
   var area = document.getElementById('neta-rows');
   var row = document.createElement('div');
   row.className = 'neta-row';
-  row.draggable = true;
   row.innerHTML =
     '<input type="text" class="neta-inp perf" placeholder="演者名" value="'+(perf||'')+'">'
     +'<input type="text" class="neta-inp" placeholder="演目名" value="'+(title||'')+'">'
-    +'<button class="neta-del" onclick="this.parentNode.remove()">✕</button>';
+    +'<div class="neta-btns">'
+    +'<button class="nb" title="上へ" onclick="moveRow(this,-1)">▲</button>'
+    +'<button class="nb" title="下へ" onclick="moveRow(this,1)">▼</button>'
+    +'<button class="nb del" title="削除" onclick="this.closest(\'.neta-row\').remove()">✕</button>'
+    +'</div>';
   area.appendChild(row);
-  // ドラッグ並べ替え
-  row.addEventListener('dragstart', function(e){ dragSrcRow=row; row.style.opacity='0.4'; e.dataTransfer.effectAllowed='move'; });
-  row.addEventListener('dragend', function(){ row.style.opacity='1'; });
-  row.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; });
-  row.addEventListener('drop', function(e){
-    e.preventDefault();
-    if(dragSrcRow && dragSrcRow !== row) {
-      var allRows = Array.from(area.children);
-      var srcIdx = allRows.indexOf(dragSrcRow), tgtIdx = allRows.indexOf(row);
-      if(srcIdx < tgtIdx) area.insertBefore(dragSrcRow, row.nextSibling);
-      else area.insertBefore(dragSrcRow, row);
-    }
-  });
+  // 追加した行の最初の入力にフォーカス
+  if(!perf && !title) row.querySelector('input').focus();
 }
-var dragSrcRow = null;
+
+function moveRow(btn, dir) {
+  var row = btn.closest('.neta-row');
+  var area = document.getElementById('neta-rows');
+  var rows = Array.from(area.children);
+  var idx = rows.indexOf(row);
+  if(dir===-1 && idx>0) area.insertBefore(row, rows[idx-1]);
+  if(dir===1 && idx<rows.length-1) area.insertBefore(rows[idx+1], row);
+}
 
 function getNetaContent() {
   var rows = document.getElementById('neta-rows').querySelectorAll('.neta-row');
   var lines = [];
-  rows.forEach(function(row) {
-    var inps = row.querySelectorAll('input');
-    var perf = inps[0].value.trim();
-    var title = inps[1].value.trim();
-    if(perf || title) lines.push('【'+perf+'】'+title);
+  rows.forEach(function(r){
+    var inps = r.querySelectorAll('input');
+    var p = inps[0].value.trim(), t = inps[1].value.trim();
+    if(p||t) lines.push('【'+p+'】'+t);
   });
   return lines.join('\n');
 }
@@ -415,8 +399,7 @@ function setNetaContent(content) {
   var area = document.getElementById('neta-rows');
   area.innerHTML = '';
   if(!content) { addNetaRow(); return; }
-  var lines = content.split('\n');
-  lines.forEach(function(line) {
+  content.split('\n').forEach(function(line){
     var m = line.match(/^【(.*)】(.*)$/);
     if(m) addNetaRow(m[1], m[2]);
     else if(line.trim()) addNetaRow('', line.trim());
@@ -424,6 +407,26 @@ function setNetaContent(content) {
   if(!area.children.length) addNetaRow();
 }
 
+// 前回引き継ぎ
+function inheritPrev() {
+  var dt = document.getElementById('w-date').value;
+  var num = parseInt(document.getElementById('w-num').value || document.getElementById('num-disp').textContent.replace('第','').replace('回',''))||0;
+  // 現在の編集中より前の最新レコードを探す
+  var prev = allRecs.filter(function(r){ return r.num < num || r.date < dt; })
+    .sort(function(a,b){return b.num-a.num;})[0];
+  if(!prev) { toast('前回のデータが見つかりません'); return; }
+  // 演者名だけ引き継ぎ（演目は空に）
+  var area = document.getElementById('neta-rows');
+  area.innerHTML = '';
+  prev.content.split('\n').forEach(function(line){
+    var m = line.match(/^【(.*)】(.*)$/);
+    if(m) addNetaRow(m[1], ''); // 演者名だけ引き継ぐ
+  });
+  if(!area.children.length) addNetaRow();
+  toast('第'+prev.num+'回の演者名を引き継ぎました');
+}
+
+// ===== 保存 =====
 function saveRec() {
   var dt = document.getElementById('w-date').value;
   if(!dt){toast('日付を入力してください');return;}
@@ -434,25 +437,23 @@ function saveRec() {
   var photo = document.getElementById('w-photo').value;
   var now = new Date().toISOString().slice(0,16).replace('T',' ');
 
-  if (curId) {
+  if(curId) {
     var idx = allRecs.findIndex(function(r){return r.id===curId;});
-    if (idx>=0) {
-      var existPhoto = allRecs[idx].photo||'';
-      allRecs[idx] = {id:curId, num:num, date:dt, content:content, photo:(photo||existPhoto), created:allRecs[idx].created};
+    if(idx>=0) {
+      var ep = allRecs[idx].photo||'';
+      allRecs[idx] = {id:curId, num:num, date:dt, content:content, photo:(photo||ep), created:allRecs[idx].created};
     }
     toast('✓ 第'+num+'回を更新しました');
   } else {
-    var newId = Date.now().toString();
-    allRecs.push({id:newId, num:num, date:dt, content:content, photo:photo||'', created:now});
+    allRecs.push({id:Date.now().toString(), num:num, date:dt, content:content, photo:photo||'', created:now});
     toast('✓ 第'+num+'回を保存しました');
   }
   save_(allRecs);
   curId=null;
   document.getElementById('del-btn').style.display='none';
-  document.getElementById('write-sec').textContent='記録する';
-  document.getElementById('neta-rows').innerHTML='';
-  addNetaRow();
+  document.getElementById('neta-rows').innerHTML=''; addNetaRow();
   document.getElementById('w-photo').value='';
+  document.getElementById('write-sec').textContent='記録する';
   renderStats(); renderRangeTabs(); renderHome();
   go('home');
 }
@@ -460,8 +461,7 @@ function saveRec() {
 function delRec() {
   if(!curId||!confirm('削除しますか？'))return;
   allRecs = allRecs.filter(function(r){return r.id!==curId;});
-  save_(allRecs);
-  curId=null;
+  save_(allRecs); curId=null;
   toast('削除しました');
   renderStats(); renderRangeTabs(); renderHome();
   go('home');
@@ -469,40 +469,61 @@ function delRec() {
 
 function clearForm() {
   document.getElementById('w-date').value=td();
-  document.getElementById('neta-rows').innerHTML='';
-  addNetaRow();
+  document.getElementById('neta-rows').innerHTML=''; addNetaRow();
   document.getElementById('w-photo').value='';
   document.getElementById('del-btn').style.display='none';
   document.getElementById('write-sec').textContent='記録する';
-  curId=null;
-  onDateChange();
+  curId=null; onDateChange();
 }
 
+// ===== 詳細モーダル =====
 function openModal(id) {
   var r = allRecs.find(function(x){return x.id===id;});
   if(!r)return;
-  // 内容をセル形式で表示
   var lines = r.content ? r.content.split('\n') : [];
-  var tableHtml = '';
+  var tbl = '';
   if(lines.length) {
-    tableHtml = '<table style="width:100%;border-collapse:collapse;margin-bottom:10px;">';
-    tableHtml += '<tr><th style="font-size:0.67rem;color:var(--gold);text-align:left;padding:3px 6px;letter-spacing:0.15em;border-bottom:1px solid var(--bdr);">演者</th><th style="font-size:0.67rem;color:var(--gold);text-align:left;padding:3px 6px;letter-spacing:0.15em;border-bottom:1px solid var(--bdr);">演目</th></tr>';
-    lines.forEach(function(line, i) {
+    tbl = '<table class="neta-table"><tr><th>演者</th><th>演目</th></tr>';
+    lines.forEach(function(line,i){
       var m = line.match(/^【(.*)】(.*)$/);
-      var perf = m ? m[1] : '';
-      var title = m ? m[2] : line;
-      var bg = i%2===0 ? 'rgba(247,243,235,0.5)' : '';
-      tableHtml += '<tr style="background:'+bg+'"><td style="padding:5px 6px;font-size:0.83rem;color:var(--gold2);font-weight:600;white-space:nowrap;">'+perf+'</td><td style="padding:5px 6px;font-size:0.85rem;">'+title+'</td></tr>';
+      tbl += '<tr><td>'+(m?m[1]:'')+'</td><td>'+(m?m[2]:line)+'</td></tr>';
     });
-    tableHtml += '</table>';
+    tbl += '</table>';
   }
   var h = '<div class="mo-num">第'+r.num+'回</div>';
   h += '<div class="mo-date">'+fdate(r.date)+'</div>';
-  h += tableHtml;
-  if(r.photo&&r.photo!=='null'&&r.photo.trim()) h += '<div style="margin-top:8px;"><a href="'+r.photo+'" target="_blank" style="color:var(--gold2);font-size:0.82rem;word-break:break-all;">📷 '+r.photo+'</a></div>';
-  h += '<div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;"><button class="btn btn-s btn-sm" onclick="editRec(\''+r.id+'\')"> 編集</button><button class="btn btn-p btn-sm" onclick="cm()">閉じる</button></div>';
+  h += tbl;
+  if(r.photo&&r.photo.trim()) h += '<div style="margin-top:8px;"><a href="'+r.photo+'" target="_blank" style="color:var(--gold2);font-size:0.82rem;word-break:break-all;">📷 '+r.photo+'</a></div>';
+  // コピーボタン
+  h += '<div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">';
+  h += '<button class="btn btn-s btn-sm" onclick="copyContent(\''+id+'\')" style="margin-right:auto;">📋 コピー</button>';
+  h += '<button class="btn btn-s btn-sm" onclick="editRec(\''+id+'\')"> 編集</button>';
+  h += '<button class="btn btn-p btn-sm" onclick="cm()">閉じる</button>';
+  h += '</div>';
   document.getElementById('mo-body').innerHTML = h;
   document.getElementById('mo').classList.add('on');
+}
+
+function copyContent(id) {
+  var r = allRecs.find(function(x){return x.id===id;});
+  if(!r)return;
+  var lines = r.content ? r.content.split('\n') : [];
+  var text = '第'+r.num+'回　'+fdate(r.date)+'\n';
+  lines.forEach(function(line){
+    var m = line.match(/^【(.*)】(.*)$/);
+    text += (m ? m[1]+'　'+m[2] : line) + '\n';
+  });
+  navigator.clipboard.writeText(text.trim()).then(function(){
+    toast('✓ クリップボードにコピーしました');
+  }).catch(function(){
+    // フォールバック
+    var ta = document.createElement('textarea');
+    ta.value = text.trim();
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('✓ コピーしました');
+  });
 }
 
 function editRec(id) {
@@ -516,72 +537,62 @@ function editRec(id) {
   document.getElementById('w-photo').value=r.photo||'';
   document.getElementById('w-num').value=r.num;
   document.getElementById('del-btn').style.display='';
-  onDateChange();
-  go('write');
+  onDateChange(); go('write');
 }
 
-// 検索
-function doSearch() {
-  var q = document.getElementById('sq').value.trim().toLowerCase();
-  if(!q){document.getElementById('s-cnt').textContent='';document.getElementById('s-result').innerHTML='';return;}
-  var rs = allRecs.filter(function(r){
-    return String(r.num)===q||r.date.indexOf(q)>=0||r.content.toLowerCase().indexOf(q)>=0;
-  }).sort(function(a,b){
-    if(sortKey==='num') return sortDir==='desc'?b.num-a.num:a.num-b.num;
-    return sortDir==='desc'?(a[sortKey]<b[sortKey]?1:-1):(a[sortKey]>b[sortKey]?1:-1);
-  });
-  document.getElementById('s-cnt').textContent = '「'+document.getElementById('sq').value.trim()+'」— '+rs.length+'件';
-  document.getElementById('s-result').innerHTML = rs.length ? rs.map(rowHtml).join('') : '<div class="es"><div class="es-t">見つかりませんでした</div></div>';
-}
-
-function srt(key,dir,btn) {
-  sortKey=key;sortDir=dir;
-  document.querySelectorAll('.sb2').forEach(function(b){b.classList.remove('on');});
+// ===== 検索 =====
+function setSortSearch(dir, btn) {
+  searchSort = dir;
+  document.querySelectorAll('#s-sort-new,#s-sort-old').forEach(function(b){b.classList.remove('on');});
   btn.classList.add('on');
   doSearch();
 }
 
-// CSV書き出し
+function doSearch() {
+  var q = document.getElementById('sq').value.trim().toLowerCase();
+  if(!q){ document.getElementById('s-cnt').textContent=''; document.getElementById('s-result').innerHTML=''; return; }
+  var rs = allRecs.filter(function(r){
+    return String(r.num)===q || r.date.indexOf(q)>=0 || r.content.toLowerCase().indexOf(q)>=0;
+  }).sort(function(a,b){ return searchSort==='desc' ? b.num-a.num : a.num-b.num; });
+  document.getElementById('s-cnt').textContent='「'+document.getElementById('sq').value.trim()+'」— '+rs.length+'件';
+  document.getElementById('s-result').innerHTML = rs.length ? rs.map(rowHtml).join('') : '<div class="es"><div class="es-t">見つかりませんでした</div></div>';
+}
+
+// ===== CSV書き出し =====
 function dlCSV() {
   var rows = [['ID','回数','日付','内容','写真リンク','登録日']];
   allRecs.forEach(function(r){rows.push([r.id,r.num,r.date,r.content,r.photo||'',r.created||'']);});
-  var csv = '\uFEFF' + rows.map(function(r){return r.map(function(c){return '"'+String(c||'').replace(/"/g,'""')+'"';}).join(',');}).join('\r\n');
-  var a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='連続講談千鳥亭_'+new Date().toISOString().slice(0,10)+'.csv';
-  a.click();
-  toast('✓ CSV書き出し完了');
+  var csv = '\uFEFF'+rows.map(function(r){return r.map(function(c){return '"'+String(c||'').replace(/"/g,'""')+'"';}).join(',');}).join('\r\n');
+  var a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='連続講談千鳥亭_'+td()+'.csv'; a.click(); toast('✓ CSV書き出し完了');
 }
 
-// JSON書き出し
+// ===== JSON書き出し =====
 function dlJSON() {
-  var a=document.createElement('a');
-  a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(allRecs,null,2));
-  a.download='連続講談千鳥亭_'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();
-  toast('✓ JSON書き出し完了');
+  var a=document.createElement('a'); a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(allRecs,null,2));
+  a.download='連続講談千鳥亭_'+td()+'.json'; a.click(); toast('✓ JSON書き出し完了');
 }
 
-// インポート（写真リンク保護）
+// ===== インポート =====
 function importFile(input, type) {
-  var file = input.files[0]; if(!file)return;
-  var prog = document.getElementById('imp-prog-'+type);
-  prog.textContent = '読み込み中…';
-  var reader = new FileReader();
-  reader.onload = function(e) {
+  var file=input.files[0]; if(!file)return;
+  var prog=document.getElementById('imp-prog-'+type);
+  prog.textContent='読み込み中…';
+  var reader=new FileReader();
+  reader.onload=function(e){
     try {
-      var existMap = {};
+      var existMap={};
       allRecs.forEach(function(r){ existMap[r.id]={photo:r.photo||'',idx:allRecs.indexOf(r)}; });
-      var added=0, updated=0, newRecs = allRecs.slice();
-      if(type==='json') {
-        var records = JSON.parse(e.target.result);
-        records.forEach(function(r) {
+      var added=0,updated=0,newRecs=allRecs.slice();
+      if(type==='json'){
+        var records=JSON.parse(e.target.result);
+        records.forEach(function(r){
           var id=String(r.id||'');
           if(!id)id=Date.now().toString()+'_'+Math.random().toString(36).slice(2,5);
           var photo=String(r.photo||'');
-          if(existMap[id]) {
-            var finalPhoto=(photo&&photo!=='null'&&photo!=='')?photo:existMap[id].photo;
-            newRecs[existMap[id].idx]={id:id,num:Number(r.num||0),date:String(r.date||''),content:String(r.content||''),photo:finalPhoto,created:String(r.created||'')};
+          if(existMap[id]){
+            var fp=(photo&&photo!=='null'&&photo!=='')?photo:existMap[id].photo;
+            newRecs[existMap[id].idx]={id:id,num:Number(r.num||0),date:String(r.date||''),content:String(r.content||''),photo:fp,created:String(r.created||'')};
             updated++;
           } else {
             newRecs.push({id:id,num:Number(r.num||0),date:String(r.date||''),content:String(r.content||''),photo:photo,created:String(r.created||'')});
@@ -605,17 +616,16 @@ function importFile(input, type) {
           }
         }
       }
-      allRecs = newRecs;
-      save_(allRecs);
-      renderStats(); renderRangeTabs(); renderHome();
-      prog.textContent = '✓ 追加:'+added+'件 更新:'+updated+'件';
+      allRecs=newRecs; save_(allRecs);
+      renderStats();renderRangeTabs();renderHome();
+      prog.textContent='✓ 追加:'+added+'件 更新:'+updated+'件';
       toast('✓ インポート完了');
-    } catch(ex) { prog.textContent='エラー:'+ex.message; }
+    } catch(ex){ prog.textContent='エラー:'+ex.message; }
   };
-  reader.readAsText(file, 'UTF-8');
+  reader.readAsText(file,'UTF-8');
 }
 
-function parseCSV_(line) {
+function parseCSV_(line){
   var result=[],cur='',inQ=false;
   for(var i=0;i<line.length;i++){var c=line[i];if(inQ){if(c==='"'&&line[i+1]==='"'){cur+='"';i++;}else if(c==='"'){inQ=false;}else{cur+=c;}}else{if(c==='"'){inQ=true;}else if(c===','){result.push(cur);cur='';}else{cur+=c;}}}
   result.push(cur);return result;
@@ -624,119 +634,7 @@ function parseCSV_(line) {
 function clearAll() {
   if(!confirm('全データを削除します。この操作は取り消せません。\n本当によろしいですか？'))return;
   if(!confirm('本当に全データを削除しますか？'))return;
-  allRecs=[];
-  save_(allRecs);
-  renderStats();renderRangeTabs();renderHome();
-  toast('全データを削除しました');
-}
-
-// ===== APIキー =====
-function saveApiKey() {
-  var k = document.getElementById('api-key-inp').value.trim();
-  if(!k){toast('APIキーを入力してください');return;}
-  localStorage.setItem('chiritori_apikey', k);
-  document.getElementById('api-key-status').textContent = '✓ 保存しました';
-  setTimeout(function(){document.getElementById('api-key-status').textContent='✓ APIキー設定済み';},2000);
-}
-
-// ===== 写真読み取り =====
-var photoBase64 = null;
-
-function openPhotoRead() {
-  photoBase64 = null;
-  document.getElementById('photo-preview-img').style.display='none';
-  document.getElementById('photo-read-prog').textContent='';
-  document.getElementById('photo-read-btn').disabled=true;
-  document.getElementById('mo-photo').classList.add('on');
-}
-
-function closeMoPhoto() {
-  document.getElementById('mo-photo').classList.remove('on');
-  photoBase64 = null;
-}
-
-document.getElementById('mo-photo').addEventListener('click',function(e){if(e.target===this)closeMoPhoto();});
-
-function onPhotoUpload(input) {
-  var file = input.files[0]; if(!file)return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    photoBase64 = e.target.result;
-    var img = document.getElementById('photo-preview-img');
-    img.src = photoBase64; img.style.display='block';
-    document.getElementById('photo-read-btn').disabled=false;
-    document.getElementById('photo-read-prog').textContent='写真を読み込みました。「AIで読み取る」を押してください。';
-  };
-  reader.readAsDataURL(file);
-}
-
-function doPhotoRead() {
-  var apiKey = localStorage.getItem('chiritori_apikey')||'';
-  if(!apiKey) { toast('管理タブでAPIキーを設定してください'); closeMoPhoto(); go('data'); return; }
-  if(!photoBase64) { toast('写真を選択してください'); return; }
-
-  var prog = document.getElementById('photo-read-prog');
-  var btn = document.getElementById('photo-read-btn');
-  prog.textContent = '🤖 AIが読み取り中…';
-  btn.disabled = true;
-
-  // base64からmimeTypeとdataを分離
-  var parts = photoBase64.split(',');
-  var mimeType = parts[0].match(/:(.*?);/)[1];
-  var b64data = parts[1];
-
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-opus-4-5',
-      max_tokens: 1024,
-      messages: [{
-        role: 'user',
-        content: [
-          {
-            type: 'image',
-            source: { type: 'base64', media_type: mimeType, data: b64data }
-          },
-          {
-            type: 'text',
-            text: 'この写真は落語・講談の根多帳（演目リスト）です。写真に書かれている演者名と演目名の組み合わせを全て読み取り、必ずJSON配列だけで返してください。例：[{"perf":"小南陵","title":"真田三代記 その236 穴山小助の最期"},{"perf":"南龍","title":"孝心夫婦子12"}] のように。前後の説明文や```は不要です。読み取れない場合は[]を返してください。'
-          }
-        ]
-      }]
-    })
-  })
-  .then(function(res){ return res.json(); })
-  .then(function(data) {
-    btn.disabled = false;
-    if(data.error) { prog.textContent = 'エラー: '+data.error.message; return; }
-    var text = data.content && data.content[0] ? data.content[0].text : '[]';
-    // JSON部分を抽出
-    var match = text.match(/\[[\s\S]*\]/);
-    if(!match) { prog.textContent = '読み取れませんでした。写真を確認してください。'; return; }
-    try {
-      var items = JSON.parse(match[0]);
-      if(!items.length) { prog.textContent = '演目が見つかりませんでした。'; return; }
-      // セルに反映
-      document.getElementById('neta-rows').innerHTML = '';
-      items.forEach(function(item) { addNetaRow(item.perf||'', item.title||''); });
-      prog.textContent = '✓ '+items.length+'件読み取りました！内容を確認して保存してください。';
-      setTimeout(function(){
-        closeMoPhoto();
-        go('write');
-      }, 1200);
-    } catch(e) {
-      prog.textContent = '解析エラー: '+e.message;
-    }
-  })
-  .catch(function(e) {
-    btn.disabled = false;
-    prog.textContent = 'エラー: '+e.message;
-  });
+  allRecs=[];save_(allRecs);renderStats();renderRangeTabs();renderHome();toast('全データを削除しました');
 }
 </script>
 </body>
