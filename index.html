@@ -38,7 +38,9 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
 .sn{font-family:"Shippori Mincho B1",serif;font-size:1.5rem;color:var(--gold2);line-height:1;}
 .sl{font-size:0.6rem;letter-spacing:0.12em;color:rgba(247,243,235,0.5);margin-top:3px;}
 /* ソートバー */
-.sort-bar{display:flex;gap:6px;margin-bottom:12px;align-items:center;flex-wrap:wrap;}
+.sort-bar{display:flex;gap:5px;align-items:center;}
+.tab-wrap{display:flex;flex-direction:column;gap:0;margin-bottom:14px;}
+.tab-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px;}
 .sort-btn{padding:6px 14px;border-radius:20px;font-size:0.76rem;cursor:pointer;border:1.5px solid var(--bdr2);background:rgba(255,255,255,0.7);color:var(--ink2);font-family:"Noto Sans JP",sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:4px;}
 .sort-btn:hover{border-color:var(--red);}.sort-btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink);}
 /* 検索 */
@@ -122,12 +124,16 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
     <div class="sb"><div class="sn" id="s-year">0</div><div class="sl">今年の開催</div></div>
     <div class="sb"><div class="sn" id="s-next">第1回</div><div class="sl">次回</div></div>
   </div>
-  <div class="range-tabs" id="range-tabs"></div>
-  <div class="sort-bar">
-    <button class="sort-btn on" id="sort-new" onclick="setSortHome('desc',this)">▼ 新しい順</button>
-    <button class="sort-btn" id="sort-old" onclick="setSortHome('asc',this)">▲ 古い順</button>
+  <div class="tab-wrap">
+    <div class="tab-top">
+      <div class="range-tabs" id="range-tabs" style="flex:1;min-width:0;"></div>
+      <div class="sort-bar" style="flex-shrink:0;">
+        <button class="sort-btn on" id="sort-new" onclick="setSortHome('desc',this)">▼ 新</button>
+        <button class="sort-btn" id="sort-old" onclick="setSortHome('asc',this)">▲ 古</button>
+      </div>
+    </div>
+    <div class="cnt-txt" id="home-cnt"></div>
   </div>
-  <div class="cnt-txt" id="home-cnt"></div>
   <div id="rec-list"><div class="es"><div class="es-i">📜</div><div class="es-t">まだ記録がありません</div></div></div>
 </div>
 
@@ -284,6 +290,9 @@ function go(id) {
 
 window.onload = function() {
   allRecs = load_();
+  // 今日の回数のタブへ自動ジャンプ
+  var todayNum = calcNumber_(td());
+  rangeStart = Math.floor((todayNum-1)/100)*100+1;
   document.getElementById('w-date').value = td();
   addNetaRow();
   onDateChange();
@@ -303,11 +312,16 @@ function renderStats() {
 
 // ===== 100回タブ =====
 function renderRangeTabs() {
-  var maxNum = allRecs.length ? Math.max.apply(null, allRecs.map(function(r){return r.num;})) : 800;
+  var maxNum = allRecs.length ? Math.max.apply(null, allRecs.map(function(r){return r.num;})) : 0;
+  var todayNum = calcNumber_(td());
+  if (todayNum > maxNum) maxNum = todayNum;
+  var ranges = [];
+  for (var s=1; s<=maxNum+99; s+=100) ranges.push(s);
+  ranges = ranges.slice().reverse(); // 常に新しい順（固定）
   var tabs = '';
-  for (var s=1; s<=maxNum+99; s+=100) {
+  ranges.forEach(function(s) {
     tabs += '<button class="rtab'+(rangeStart===s?' on':'')+'" onclick="setRange('+s+')">'+(s)+'〜'+(s+99)+'</button>';
-  }
+  });
   document.getElementById('range-tabs').innerHTML = tabs;
 }
 function setRange(s) { rangeStart=s; renderRangeTabs(); renderHome(); }
@@ -317,7 +331,7 @@ function setSortHome(dir, btn) {
   homeSort = dir;
   document.querySelectorAll('#sort-new,#sort-old').forEach(function(b){b.classList.remove('on');});
   btn.classList.add('on');
-  renderHome();
+  renderHome(); // タブは動かさない
 }
 
 function renderHome() {
