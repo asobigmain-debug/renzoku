@@ -72,6 +72,16 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
 .drop-area:hover{border-color:var(--red);background:rgba(155,35,53,0.03);}
 .drop-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .drop-txt{font-size:0.78rem;color:var(--gold);letter-spacing:0.1em;}
+/* セル入力 */
+.neta-row{display:grid;grid-template-columns:1fr 1fr 32px;gap:5px;margin-bottom:5px;align-items:center;}
+.neta-inp{border:1.5px solid var(--bdr);border-radius:5px;padding:7px 9px;font-family:"Noto Sans JP",sans-serif;font-size:0.85rem;color:var(--ink);background:rgba(247,243,235,0.95);width:100%;transition:border-color 0.15s;}
+.neta-inp:focus{outline:none;border-color:var(--red);}
+.neta-inp.perf{background:rgba(245,238,215,0.95);}
+.neta-del{width:28px;height:28px;border-radius:5px;background:none;border:1.5px solid var(--bdr);color:var(--ink2);cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.14s;}
+.neta-del:hover{border-color:var(--red);color:var(--red);}
+.mo-ttl{font-family:"Shippori Mincho B1",serif;font-size:1rem;letter-spacing:0.18em;color:var(--ink2);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.mo-ttl::before{content:"";display:block;width:4px;height:16px;background:var(--red);border-radius:2px;}
+.mo-br{display:flex;gap:8px;justify-content:flex-end;}
 .prog{font-size:0.74rem;color:var(--gold);margin-top:5px;min-height:17px;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(65px);background:var(--ink);color:var(--bg);padding:10px 22px;border-radius:20px;font-size:0.8rem;z-index:999;transition:transform 0.3s;border-left:4px solid var(--red);white-space:nowrap;}
 .toast.on{transform:translateX(-50%) translateY(0);}
@@ -121,13 +131,52 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
       </div>
       <div style="font-size:0.66rem;color:var(--ink2);margin-top:3px;">※回数バッジをクリックで直接修正できます</div>
     </div>
-    <div><label class="lbl">内容</label><textarea id="w-content" class="ta"></textarea></div>
+
+    <!-- 根多セル入力 -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <label class="lbl" style="margin:0;">根多（演者・演目）</label>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-s btn-sm" onclick="openPhotoRead()" style="font-size:0.72rem;">📷 写真から読み取り</button>
+          <button class="btn btn-s btn-sm" onclick="addNetaRow()" style="font-size:0.72rem;">＋ 行を追加</button>
+        </div>
+      </div>
+      <!-- ヘッダー -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 32px;gap:5px;margin-bottom:4px;padding:0 4px;">
+        <div style="font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;">演者</div>
+        <div style="font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;">演目</div>
+        <div></div>
+      </div>
+      <div id="neta-rows"></div>
+      <div style="font-size:0.68rem;color:var(--ink2);margin-top:6px;">※行を長押し（ドラッグ）で順番を入れ替えられます</div>
+    </div>
+
     <div><label class="lbl">写真リンク</label><input type="url" id="w-photo" class="inp"></div>
     <div class="br">
       <button class="btn btn-s btn-sm" id="del-btn" style="display:none;border-color:var(--red);color:var(--red);" onclick="delRec()">削除</button>
       <button class="btn btn-s btn-sm" onclick="clearForm()">クリア</button>
       <button class="btn btn-p btn-sm" onclick="saveRec()">💾 保存する</button>
     </div>
+  </div>
+</div></div>
+
+<!-- 写真読み取りモーダル -->
+<div class="mo" id="mo-photo"><div class="mb">
+  <button class="mc" onclick="closeMoPhoto()">✕</button>
+  <div class="mo-ttl">📷 ネタ帳写真から読み取り</div>
+  <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:14px;line-height:1.8;">
+    ネタ帳の写真を撮影してアップロードすると、AIが演者・演目を自動で読み取ります。<br>
+    <span style="font-size:0.7rem;color:var(--gold);">※Anthropic APIキーが必要です（管理タブで設定）</span>
+  </div>
+  <div class="drop-area" id="photo-drop">
+    <input type="file" accept="image/*" onchange="onPhotoUpload(this)">
+    <div class="drop-txt">📷 写真を選択またはカメラで撮影</div>
+  </div>
+  <img id="photo-preview-img" style="display:none;width:100%;max-height:200px;object-fit:contain;border-radius:6px;margin-top:8px;">
+  <div class="prog" id="photo-read-prog" style="margin-top:8px;"></div>
+  <div class="mo-br" style="margin-top:14px;">
+    <button class="btn btn-s btn-sm" onclick="closeMoPhoto()">キャンセル</button>
+    <button class="btn btn-p btn-sm" id="photo-read-btn" onclick="doPhotoRead()" disabled>🤖 AIで読み取る</button>
   </div>
 </div></div>
 
@@ -173,6 +222,32 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
       </div>
     </div>
   </div>
+  <div class="card"><div class="sec">📷 写真読み取り設定</div>
+    <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:10px;line-height:1.8;">
+      ネタ帳の写真からAIで演者・演目を読み取るには、AnthropicのAPIキーが必要です。<br>
+      <a href="https://console.anthropic.com/" target="_blank" style="color:var(--gold2);font-size:0.72rem;">console.anthropic.com</a> から取得できます。
+    </div>
+    <label class="lbl">APIキー</label>
+    <div style="display:flex;gap:8px;">
+      <input type="password" id="api-key-inp" class="inp" placeholder="sk-ant-..." style="flex:1;">
+      <button class="btn btn-p btn-sm" onclick="saveApiKey()">保存</button>
+    </div>
+    <div style="font-size:0.68rem;color:var(--ink2);margin-top:6px;">端末のみに保存されます。外部には送信されません。</div>
+    <div id="api-key-status" style="font-size:0.75rem;color:var(--gold);margin-top:4px;"></div>
+  </div>
+  <div class="card"><div class="sec">回数の補正</div>
+    <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:12px;line-height:1.8;">
+      自動計算がズレている場合に補正できます。<br>
+      例：自動計算が768と出るが実際は769 → <strong>+1</strong>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <label class="lbl" style="margin:0;">補正値：</label>
+      <input type="number" id="offset-inp" class="inp" style="width:90px;" value="0">
+      <button class="btn btn-p btn-sm" onclick="saveOffset()">保存</button>
+      <span id="offset-status" style="font-size:0.75rem;color:var(--gold);"></span>
+    </div>
+    <div style="font-size:0.68rem;color:var(--ink2);margin-top:8px;">現在の補正値：<span id="offset-current">0</span></div>
+  </div>
   <div class="card"><div class="sec">データ管理</div>
     <div style="font-size:0.78rem;color:var(--ink2);margin-bottom:10px;">全データを削除します（復元できません）</div>
     <button class="btn btn-sm" style="background:none;border:1.5px solid rgba(155,35,53,0.4);color:var(--red);font-size:0.74rem;" onclick="clearAll()">⚠️ 全データを削除する</button>
@@ -184,12 +259,23 @@ body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xm
 
 <script>
 var STORE_KEY = 'chiritori_records';
+var OFFSET_KEY = 'chiritori_offset';
 var allRecs = [], curId = null, sortKey = 'num', sortDir = 'desc', rangeStart = 1;
 var WD = ['日','月','火','水','木','金','土'];
 
 // ストレージ
 function load_() { try { return JSON.parse(localStorage.getItem(STORE_KEY)||'[]'); } catch(e){ return []; } }
 function save_(data) { localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+function loadOffset_() { return parseInt(localStorage.getItem(OFFSET_KEY)||'0')||0; }
+function saveOffset_() {
+  var v = parseInt(document.getElementById('offset-inp').value)||0;
+  localStorage.setItem(OFFSET_KEY, String(v));
+  document.getElementById('offset-current').textContent = v > 0 ? '+'+v : String(v);
+  document.getElementById('offset-status').textContent = '✓ 保存しました';
+  setTimeout(function(){ document.getElementById('offset-status').textContent=''; },2000);
+  onDateChange();
+}
+function saveOffset() { saveOffset_(); }
 
 // 回数計算
 function calcNumber_(dateStr) {
@@ -224,7 +310,14 @@ function go(id) {
 
 window.onload = function() {
   allRecs = load_();
+  var offset = loadOffset_();
+  document.getElementById('offset-inp').value = offset;
+  document.getElementById('offset-current').textContent = offset > 0 ? '+'+offset : String(offset);
+  // APIキー表示
+  var ak = localStorage.getItem('chiritori_apikey')||'';
+  if(ak) { document.getElementById('api-key-inp').value = ak; document.getElementById('api-key-status').textContent = '✓ APIキー設定済み'; }
   document.getElementById('w-date').value = td();
+  addNetaRow(); // 最初の行を追加
   onDateChange();
   renderStats();
   renderRangeTabs();
@@ -268,7 +361,7 @@ function rowHtml(r) {
 function onDateChange() {
   var dt = document.getElementById('w-date').value;
   if(!dt) return;
-  var n = calcNumber_(dt);
+  var n = calcNumber_(dt) + loadOffset_();
   document.getElementById('num-disp').textContent = '第'+n+'回';
   document.getElementById('w-num').value = n;
   document.getElementById('day-disp').textContent = fdate(dt);
@@ -279,13 +372,65 @@ document.getElementById('num-disp').addEventListener('click', function(){
   w.style.display = w.style.display==='none' ? 'block' : 'none';
 });
 
+// ===== セル入力 =====
+function addNetaRow(perf, title) {
+  var area = document.getElementById('neta-rows');
+  var row = document.createElement('div');
+  row.className = 'neta-row';
+  row.draggable = true;
+  row.innerHTML =
+    '<input type="text" class="neta-inp perf" placeholder="演者名" value="'+(perf||'')+'">'
+    +'<input type="text" class="neta-inp" placeholder="演目名" value="'+(title||'')+'">'
+    +'<button class="neta-del" onclick="this.parentNode.remove()">✕</button>';
+  area.appendChild(row);
+  // ドラッグ並べ替え
+  row.addEventListener('dragstart', function(e){ dragSrcRow=row; row.style.opacity='0.4'; e.dataTransfer.effectAllowed='move'; });
+  row.addEventListener('dragend', function(){ row.style.opacity='1'; });
+  row.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; });
+  row.addEventListener('drop', function(e){
+    e.preventDefault();
+    if(dragSrcRow && dragSrcRow !== row) {
+      var allRows = Array.from(area.children);
+      var srcIdx = allRows.indexOf(dragSrcRow), tgtIdx = allRows.indexOf(row);
+      if(srcIdx < tgtIdx) area.insertBefore(dragSrcRow, row.nextSibling);
+      else area.insertBefore(dragSrcRow, row);
+    }
+  });
+}
+var dragSrcRow = null;
+
+function getNetaContent() {
+  var rows = document.getElementById('neta-rows').querySelectorAll('.neta-row');
+  var lines = [];
+  rows.forEach(function(row) {
+    var inps = row.querySelectorAll('input');
+    var perf = inps[0].value.trim();
+    var title = inps[1].value.trim();
+    if(perf || title) lines.push('【'+perf+'】'+title);
+  });
+  return lines.join('\n');
+}
+
+function setNetaContent(content) {
+  var area = document.getElementById('neta-rows');
+  area.innerHTML = '';
+  if(!content) { addNetaRow(); return; }
+  var lines = content.split('\n');
+  lines.forEach(function(line) {
+    var m = line.match(/^【(.*)】(.*)$/);
+    if(m) addNetaRow(m[1], m[2]);
+    else if(line.trim()) addNetaRow('', line.trim());
+  });
+  if(!area.children.length) addNetaRow();
+}
+
 function saveRec() {
   var dt = document.getElementById('w-date').value;
   if(!dt){toast('日付を入力してください');return;}
   var numInp = document.getElementById('w-num').value;
   var numDisp = document.getElementById('num-disp').textContent.replace('第','').replace('回','');
   var num = parseInt(numInp||numDisp)||0;
-  var content = document.getElementById('w-content').value;
+  var content = getNetaContent();
   var photo = document.getElementById('w-photo').value;
   var now = new Date().toISOString().slice(0,16).replace('T',' ');
 
@@ -304,9 +449,10 @@ function saveRec() {
   save_(allRecs);
   curId=null;
   document.getElementById('del-btn').style.display='none';
-  document.getElementById('w-content').value='';
-  document.getElementById('w-photo').value='';
   document.getElementById('write-sec').textContent='記録する';
+  document.getElementById('neta-rows').innerHTML='';
+  addNetaRow();
+  document.getElementById('w-photo').value='';
   renderStats(); renderRangeTabs(); renderHome();
   go('home');
 }
@@ -323,7 +469,8 @@ function delRec() {
 
 function clearForm() {
   document.getElementById('w-date').value=td();
-  document.getElementById('w-content').value='';
+  document.getElementById('neta-rows').innerHTML='';
+  addNetaRow();
   document.getElementById('w-photo').value='';
   document.getElementById('del-btn').style.display='none';
   document.getElementById('write-sec').textContent='記録する';
@@ -334,10 +481,25 @@ function clearForm() {
 function openModal(id) {
   var r = allRecs.find(function(x){return x.id===id;});
   if(!r)return;
+  // 内容をセル形式で表示
+  var lines = r.content ? r.content.split('\n') : [];
+  var tableHtml = '';
+  if(lines.length) {
+    tableHtml = '<table style="width:100%;border-collapse:collapse;margin-bottom:10px;">';
+    tableHtml += '<tr><th style="font-size:0.67rem;color:var(--gold);text-align:left;padding:3px 6px;letter-spacing:0.15em;border-bottom:1px solid var(--bdr);">演者</th><th style="font-size:0.67rem;color:var(--gold);text-align:left;padding:3px 6px;letter-spacing:0.15em;border-bottom:1px solid var(--bdr);">演目</th></tr>';
+    lines.forEach(function(line, i) {
+      var m = line.match(/^【(.*)】(.*)$/);
+      var perf = m ? m[1] : '';
+      var title = m ? m[2] : line;
+      var bg = i%2===0 ? 'rgba(247,243,235,0.5)' : '';
+      tableHtml += '<tr style="background:'+bg+'"><td style="padding:5px 6px;font-size:0.83rem;color:var(--gold2);font-weight:600;white-space:nowrap;">'+perf+'</td><td style="padding:5px 6px;font-size:0.85rem;">'+title+'</td></tr>';
+    });
+    tableHtml += '</table>';
+  }
   var h = '<div class="mo-num">第'+r.num+'回</div>';
   h += '<div class="mo-date">'+fdate(r.date)+'</div>';
-  h += '<div class="mo-body">'+r.content+'</div>';
-  if(r.photo&&r.photo!=='null'&&r.photo.trim()) h += '<div style="margin-top:12px;"><a href="'+r.photo+'" target="_blank" style="color:var(--gold2);font-size:0.82rem;word-break:break-all;">📷 '+r.photo+'</a></div>';
+  h += tableHtml;
+  if(r.photo&&r.photo!=='null'&&r.photo.trim()) h += '<div style="margin-top:8px;"><a href="'+r.photo+'" target="_blank" style="color:var(--gold2);font-size:0.82rem;word-break:break-all;">📷 '+r.photo+'</a></div>';
   h += '<div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;"><button class="btn btn-s btn-sm" onclick="editRec(\''+r.id+'\')"> 編集</button><button class="btn btn-p btn-sm" onclick="cm()">閉じる</button></div>';
   document.getElementById('mo-body').innerHTML = h;
   document.getElementById('mo').classList.add('on');
@@ -350,7 +512,7 @@ function editRec(id) {
   curId=r.id;
   document.getElementById('write-sec').textContent='記録を編集';
   document.getElementById('w-date').value=r.date;
-  document.getElementById('w-content').value=r.content;
+  setNetaContent(r.content);
   document.getElementById('w-photo').value=r.photo||'';
   document.getElementById('w-num').value=r.num;
   document.getElementById('del-btn').style.display='';
@@ -466,6 +628,115 @@ function clearAll() {
   save_(allRecs);
   renderStats();renderRangeTabs();renderHome();
   toast('全データを削除しました');
+}
+
+// ===== APIキー =====
+function saveApiKey() {
+  var k = document.getElementById('api-key-inp').value.trim();
+  if(!k){toast('APIキーを入力してください');return;}
+  localStorage.setItem('chiritori_apikey', k);
+  document.getElementById('api-key-status').textContent = '✓ 保存しました';
+  setTimeout(function(){document.getElementById('api-key-status').textContent='✓ APIキー設定済み';},2000);
+}
+
+// ===== 写真読み取り =====
+var photoBase64 = null;
+
+function openPhotoRead() {
+  photoBase64 = null;
+  document.getElementById('photo-preview-img').style.display='none';
+  document.getElementById('photo-read-prog').textContent='';
+  document.getElementById('photo-read-btn').disabled=true;
+  document.getElementById('mo-photo').classList.add('on');
+}
+
+function closeMoPhoto() {
+  document.getElementById('mo-photo').classList.remove('on');
+  photoBase64 = null;
+}
+
+document.getElementById('mo-photo').addEventListener('click',function(e){if(e.target===this)closeMoPhoto();});
+
+function onPhotoUpload(input) {
+  var file = input.files[0]; if(!file)return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    photoBase64 = e.target.result;
+    var img = document.getElementById('photo-preview-img');
+    img.src = photoBase64; img.style.display='block';
+    document.getElementById('photo-read-btn').disabled=false;
+    document.getElementById('photo-read-prog').textContent='写真を読み込みました。「AIで読み取る」を押してください。';
+  };
+  reader.readAsDataURL(file);
+}
+
+function doPhotoRead() {
+  var apiKey = localStorage.getItem('chiritori_apikey')||'';
+  if(!apiKey) { toast('管理タブでAPIキーを設定してください'); closeMoPhoto(); go('data'); return; }
+  if(!photoBase64) { toast('写真を選択してください'); return; }
+
+  var prog = document.getElementById('photo-read-prog');
+  var btn = document.getElementById('photo-read-btn');
+  prog.textContent = '🤖 AIが読み取り中…';
+  btn.disabled = true;
+
+  // base64からmimeTypeとdataを分離
+  var parts = photoBase64.split(',');
+  var mimeType = parts[0].match(/:(.*?);/)[1];
+  var b64data = parts[1];
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01'
+    },
+    body: JSON.stringify({
+      model: 'claude-opus-4-5',
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: [
+          {
+            type: 'image',
+            source: { type: 'base64', media_type: mimeType, data: b64data }
+          },
+          {
+            type: 'text',
+            text: 'この写真は落語・講談の根多帳（演目リスト）です。写真に書かれている演者名と演目名の組み合わせを全て読み取り、必ずJSON配列だけで返してください。例：[{"perf":"小南陵","title":"真田三代記 その236 穴山小助の最期"},{"perf":"南龍","title":"孝心夫婦子12"}] のように。前後の説明文や```は不要です。読み取れない場合は[]を返してください。'
+          }
+        ]
+      }]
+    })
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(data) {
+    btn.disabled = false;
+    if(data.error) { prog.textContent = 'エラー: '+data.error.message; return; }
+    var text = data.content && data.content[0] ? data.content[0].text : '[]';
+    // JSON部分を抽出
+    var match = text.match(/\[[\s\S]*\]/);
+    if(!match) { prog.textContent = '読み取れませんでした。写真を確認してください。'; return; }
+    try {
+      var items = JSON.parse(match[0]);
+      if(!items.length) { prog.textContent = '演目が見つかりませんでした。'; return; }
+      // セルに反映
+      document.getElementById('neta-rows').innerHTML = '';
+      items.forEach(function(item) { addNetaRow(item.perf||'', item.title||''); });
+      prog.textContent = '✓ '+items.length+'件読み取りました！内容を確認して保存してください。';
+      setTimeout(function(){
+        closeMoPhoto();
+        go('write');
+      }, 1200);
+    } catch(e) {
+      prog.textContent = '解析エラー: '+e.message;
+    }
+  })
+  .catch(function(e) {
+    btn.disabled = false;
+    prog.textContent = 'エラー: '+e.message;
+  });
 }
 </script>
 </body>
